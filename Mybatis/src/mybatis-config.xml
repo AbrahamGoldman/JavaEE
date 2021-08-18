@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+<!--
+properties标签可以引入外部配置文件的值
+resource=""  引用我们类路径下的文件
+url=""       引用磁盘中的配置文件
+-->
+<properties resource="druid.properties"></properties>
+
+<!--
+settings标签
+这是 MyBatis 中极为重要的调整设置，它们会改变 MyBatis 的运行时行为，里面可以设置的东西很多
+比如：mapUnderscoreToCamelCase
+	是否开启驼峰命名自动映射，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn。
+因为我们数据库的字段命名是不区分大小写的，而Java中是区分的，如果Java满足了驼峰命名aColumn
+这个时候，无论数据库中的名字是A_COLUMN还是a_Column 或者 a_column 等等都可以映射
+-->
+    <settings >
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+<!--起别名，可以单个单个的起，也可以批量起别名，批量操作主要是针对一个bean或Dao包有几十个上百个类的情况-->
+    <typeAliases>
+<!--下面是单个起-->
+        <typeAlias type="ssm.mybatis.Dao" alias="dao"/>
+<!--下面是批量起，注意批量操作的别名一般是默认类名，如果批量操作还想起别名，怎么办？在类上加@Alias("ddd") 括号里面就是要起的别名-->
+        <package name="com.mybatis"/>
+    </typeAliases>
+
+<!--配置环境，可以配置多个环境，default默认使用哪个-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!--配置数据库-->
+                <property name="driver" value="${druid_driverClassName}"/>
+                <property name="url" value="${druid_url}"/>
+                <property name="username" value="${druid_username}"/>
+                <property name="password" value="${druid_password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+<!--切换数据库-->
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="SQL Server" value="sqlserver"/>
+        <property name="DB2" value="db2"/>
+        <property name="Oracle" value="oracle" />
+    </databaseIdProvider>
+
+    <mappers>
+<!-- 里面的属性有三个
+resource 类路径下的文件
+url      磁盘路径下的文件
+class    全类名，如果接口有xml,那么xml文件和接口在同一个位置
+        告诉mybatis，映射什么资源，这里是全局配置文件，其他的配置文件就是在此引入
+-->
+<!--        <mapper resource="com/mybatis/Dao.xml"/>-->
+<!--        <mapper class="com.mybatis.Dao"/>-->
+<!--如果其他的文件都在src下的resources文件夹下，就用这种-->
+<!--        <mapper resource="Dao.xml"/>-->
+<!--        <mapper class="com.mybatis.AnnotationDao"/>-->
+
+<!--        如果一个包下的接口特别多，几十个，写几十个mapper标签明显不现实，那么就可以用下面这种整个包映射的-->
+        <package name="com.mybatis"/>
+    </mappers>
+</configuration>

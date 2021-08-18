@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <jdbcConnection
+                driverClass="com.mysql.cj.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/test"
+                password="a123456"
+                userId="root"
+        />
+        <!--        <javaTypeResolver>-->
+        <!--            <property name="forceBigDecimals" value="false"/>-->
+        <!--        </javaTypeResolver>-->
+
+        <!--java模型生成器，就是JavaBean生成器-->
+        <javaModelGenerator targetPackage="com.mybatis.bean" targetProject="Mybatis-Generator/src">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.mybatis.mapper" targetProject="Mybatis-Generator/src">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--用来生成mapper-->
+        <javaClientGenerator targetPackage="com.mybatis.service" targetProject="Mybatis-Generator/src" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--  tableName:数据库中的表名；   domainObjectName:生成的对象使用什么名字，不指定就是用默认的   -->
+        <table tableName="t_person" domainObjectName="Person" />
+        <table tableName="t_teacher" domainObjectName="Teacher"/>
+    </context>
+</generatorConfiguration>

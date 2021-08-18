@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace: 写接口全类名，相当于告诉mybatis这个配置文件是实现了哪个接口-->
+<mapper namespace="ssm.mybatis.Dao">
+<!--select 标签定义一个查询操作-->
+<!--id：方法名,相当于方法的实现
+  resultType：返回值类型，这里要写全类名
+  #{id}是一个占位符，指的是方法形参名，就是我们传入的形参    -->
+    <select id="getT" resultType="ssm.mybatis.Employee">
+    select * from t_employee where id = #{id}
+  </select>
+
+<!--如果有其他的数据库需要切换，就这样指定数据库就可以了，但实际开发很少切换数据库-->
+    <select id="getT" resultType="ssm.mybatis.Employee" databaseId="oracle">
+    select * from t_employee where id = #{id}
+  </select>
+
+    <select id="getT" resultType="ssm.mybatis.Employee" databaseId="db2">
+    select * from t_employee where id = #{id}
+  </select>
+
+    <delete id="delete" >
+        DELETE FROM`t_employee` WHERE id=#{id}
+    </delete>
+
+    <update id="upDate" >
+   UPDATE `t_employee` SET `empname`= #{empname},`gender`= #{gender} ,`email`= #{email} WHERE id= #{id}
+    </update>
+
+    <insert id="insert" >
+    INSERT INTO `t_employee` (`empname`,`gender`,`email`) VALUES (#{empname},#{gender},#{email})
+    </insert>
+
+
+
+</mapper>

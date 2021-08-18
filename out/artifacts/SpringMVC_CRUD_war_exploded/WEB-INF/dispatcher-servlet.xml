@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">
+<!--配置扫描器-->
+    <context:component-scan base-package="com.springmvc"></context:component-scan>
+<!--配置视图解析器-->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="WEB-INF/pages/"></property>
+    <property name="suffix" value=".jsp"></property>
+</bean>
+
+    <!--默认拦截除了jsp页面之外的所有资源，如果导入了JS库报错，或者打不开，404等等，就做如下配置，但是我的是能够打开的-->
+    <!--默认的处理器去处理静态的资源，告诉SpringMVC自己映射的就自己处理，没有映射的就放行-->
+    <mvc:default-servlet-handler/>
+
+<!--    &lt;!&ndash;SpringMVC驱动去处理动态的资源&ndash;&gt;-->
+    <mvc:annotation-driven conversion-service="conversionService2"></mvc:annotation-driven>
+<!--    <mvc:annotation-driven></mvc:annotation-driven>-->
+
+<!--如果我们想要配置的Converter生效，就在这里配置：
+先创建工厂，然后把我们自定义的MyConversion放进去，放进去以后，再加入到SpringMVC驱动中
+-->
+<!--    <bean id="conversionService2" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+<!--        <property name="converters" >-->
+<!--            <set>-->
+<!--                <bean class="com.springmvc.conversion.MyConversion"></bean>-->
+<!--            </set>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--这个是上面的升级版-->
+        <bean id="conversionService2" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+            <property name="converters" >
+                <set>
+                    <bean class="com.springmvc.conversion.MyConversion"></bean>
+                </set>
+            </property>
+        </bean>
+<!--为了让SpringMVC能够识别我们的error_zh 和 error_en文件,需要做如下配置,注意id必须是messageSource-->
+<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basenames" value="com.springmvc.login.login"></property>
+</bean>
+
+<!--将我们自定义的区域解析器配置到IOC容器中，id必须为localeResolver-->
+<!--    <bean id="localeResolver" class="com.springmvc.login.MyLocaleResolver"></bean>-->
+
+<!--也可以使用系统自带的LocalResolver-->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"></bean>
+
+<!--拦截器自己取配置locale-->
+    <mvc:interceptors>
+    <bean  class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"></bean>
+</mvc:interceptors>
+
+
+
+
+
+</beans>

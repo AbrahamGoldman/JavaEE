@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!-- 在这里我们要测试使用注解的方式创建对象，当加载配置文件的时候，我们希望它能够扫描我们指定的基包
+  如果扫描到了注解，它会创建对象，我们只需要根据类名的首字母小写就可以获得该对象。来试试吧：
+  -->
+    <context:component-scan base-package="com.spring5.annotation"></context:component-scan>
+    
+    
+    <!--上面的扫描是扫描包下的所有的类，如果我们有要求，比如只扫描指定注解的包，或者包很多，想排除一些包，怎么办？-->
+<!--下面两段就满足了上面的要求，第一段：use-default-filters="false"表示不使用默认的过滤器
+扫描的结果要包含注解，注解的类型为：org.springframework.stereotype.Repository，
+说的通俗点就是扫描的带有：org.springframework.stereotype.Repository 这种注解的
+-->
+    <context:component-scan base-package="com.spring5" use-default-filters="false">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+<!--exclude:排除，整段的意思为使用默认的扫描器去扫描：com.spring5中的所有内容
+但是要排除带有：org.springframework.stereotype.Repository 这种类型的注解的类
+-->
+    <context:component-scan base-package="com.spring5">
+        <context:exclude-filter expression="org.springframework.stereotype.Repository"
+                                type="annotation"/>
+    </context:component-scan>
+
+
+
+
+
+</beans>

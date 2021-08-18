@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!--引入外部文件-->
+    <properties resource="druid.properties"></properties>
+<!--驼峰匹配数据库字段-->
+    <settings >
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+<!-- 分步查询需要在此设置懒加载,开启延迟加载和按需加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+        
+    </settings>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!--配置数据库-->
+                <property name="driver" value="${druid_driverClassName}"/>
+                <property name="url" value="${druid_url}"/>
+                <property name="username" value="${druid_username}"/>
+                <property name="password" value="${druid_password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--告诉mybatis，映射什么资源，这里是全局配置文件，其他的配置文件就是在此引入-->
+        <mapper resource="DaoMapper.xml"/>
+        <mapper resource="DogDaoMapper.xml"/>
+        <mapper resource="PersonMapper.xml"/>
+    </mappers>
+</configuration>

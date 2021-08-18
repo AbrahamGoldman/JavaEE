@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    
+    
+<bean id="stu" class="ssm.spring5.arrrylistcollectionmap.Student">
+    <property name="score">
+<!--给数组属性赋值 第一段是赋值基本属性，第二段是赋值对象属性-->
+        <array>
+            <value>102</value>
+            <value>112</value>
+            <value>19</value>
+        </array>
+    </property>
+
+    <property name="books">
+        <array>
+            <ref bean="book"></ref>
+            <ref bean="book1"></ref>
+            <ref bean="book2"></ref>
+        </array>
+    </property>
+
+<!--给List集合赋值，赋的是对象属性-->
+    <property name="courseList">
+        <list>
+            <ref bean="course1"></ref>
+            <ref bean="course2"></ref>
+        </list>
+    </property>
+    
+<!--给Map属性赋值 基本属性，和对象属性-->
+    <property name="map">
+        <map>
+            <entry key="10" value="张飞"></entry>
+            <entry key="20" value="关羽"></entry>
+            <entry key="30" value="赵云"></entry>
+        </map>
+    </property>
+
+    <property name="family">
+        <map>
+            <entry key="爸爸" value-ref="baba"></entry>
+            <entry key="妈妈" value-ref="mama"></entry>
+        </map>
+    </property>
+
+</bean>
+
+<!--BookBean  为了简化，我们直接使用p空间，给上面Book[]数组赋值-->
+<bean id="book" class="ssm.spring5.arrrylistcollectionmap.Book" p:name="查密莉亚"></bean>
+<bean id="book1" class="ssm.spring5.arrrylistcollectionmap.Book" p:name="国富论"></bean>
+<bean id="book2" class="ssm.spring5.arrrylistcollectionmap.Book" p:name="富爸爸与穷爸爸"></bean>
+
+<!--CourseBean 给上面List集合赋值-->
+<bean id="course1" class="ssm.spring5.arrrylistcollectionmap.Course">
+    <property name="name" value="计算机与科学"></property>
+</bean>
+<bean id="course2" class="ssm.spring5.arrrylistcollectionmap.Course">
+    <property name="name" value="金融学"></property>
+</bean>
+
+<!--p名称空间，给属性赋值 ，baba和mama这两个对象是给上面的map赋值-->
+<bean id="baba" class="ssm.spring5.arrrylistcollectionmap.Father" p:name="周" p:age="52"></bean>
+<bean id="mama" class="ssm.spring5.arrrylistcollectionmap.Mother" p:name="吴" p:age="49"></bean>
+
+
+
+
+</beans>

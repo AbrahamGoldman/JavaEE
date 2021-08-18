@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace: 写接口全类名，相当于告诉mybatis这个配置文件是实现了哪个接口-->
+<mapper namespace="ssm.mybatis.mapper.TeacherMapper">
+
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
+
+    <select id="getTeacherById" resultMap="map01" >
+    select * from t_teacher where id = #{id}
+  </select>
+
+    <insert id="insertList">
+         insert into t_teacher (name, adress, class_name)
+         values
+         <foreach collection="teachers" separator=","  item="teacher" >
+             (#{teacher.name},#{teacher.address},#{teacher.course})
+         </foreach>
+    </insert>
+
+    <select id="getListByCondition" resultMap="map01">
+        select * from t_teacher
+        <trim prefix="where" prefixOverrides="and" suffixOverrides="and">
+            <if test="id!=null">
+                id &lt; #{id} and
+            </if>
+            <if test="name!=null">
+                name like #{name} and
+            </if>
+            <if test="birth!=null ">
+                birth_date <![CDATA[>#{birth}]]> and
+            </if>
+        </trim>
+    </select>
+
+    <select id="getListByIds" resultMap="map01">
+        select * from t_teacher
+        <where>
+            <if test="ids.size()!=0">
+                id in
+                <foreach collection="ids" index="index" item="i" open="(" close=")" separator=",">
+                    #{i}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="getListByChoose" resultMap="map01">
+        select * from t_teacher
+        <where>
+            <choose>
+                <when test="id!=null">id=#{id}</when>
+                <when test=" name!=null and name!=&quot;&quot;">name=#{name}</when>
+                <when test="birth!=null">birth_date=#{birth}</when>
+                <otherwise> 1=1 </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <update id="updateTeacher">
+        UPDATE `t_teacher`
+        <set>
+            <if test="name!=null and name!=&quot;&quot;">name=#{name},</if>
+            <if test="birth!=null">birth_date=#{birth},</if>
+            <if test="address!=null and address!=&quot;&quot;">adress=#{address}</if>
+        </set>
+        <where>
+            <if test="id!=null">id = #{id}</if>
+        </where>
+    </update>
+
+    <resultMap id="map01" type="ssm.mybatis.bean.Teacher">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="adress"/>
+        <result property="birth" column="birth_date"/>
+        <result property="course" column="class_name"/>
+    </resultMap>
+
+</mapper>

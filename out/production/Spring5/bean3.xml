@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--这里主要是演示给对象的属性赋引用类型的值，比如其他的bean
+对象赋值给其他类的属性都用 ref   这种赋值方式称为通过外部bean的方式给属性赋值
+-->
+    <bean id="man" class="com.spring5.createinstance.Man">
+        <property name="car" ref="car1"></property>
+    </bean>
+
+    <bean id="car1" class="com.spring5.createinstance.Car">
+        <constructor-arg name="id" value="1002"></constructor-arg>
+        <constructor-arg name="name" value="广汽本田"></constructor-arg>
+    </bean>
+
+
+
+<!--下面是演示内部bean的方式给属性赋值-->
+    <bean id="man1" class="com.spring5.createinstance.Man">
+<!--这里依然可以对其他属性进行赋值 <property name="" value=""></property>-->
+        <property name="car">
+<!--bean嵌套在另一个bean-->
+            <bean id="car2" class="com.spring5.createinstance.Car">
+                <constructor-arg name="id" value="1003"></constructor-arg>
+                <constructor-arg name="name" value="德国奔驰"></constructor-arg>
+            </bean>
+
+        </property>
+    </bean>
+
+
+
+<!--级联赋值方式一：
+下面演示的是级联赋值，用外部bean的方式来演示级联赋值
+所谓级联赋值，就是给当前对象的属性赋值的时候，它属性的属性也都赋上值了
+比如,当我们给Man的对象赋值的时候， Car也做了相应的赋值
+-->
+    <bean id="man2" class="com.spring5.createinstance.Man">
+        <property name="car" ref="car4"></property>
+    </bean>
+    <bean id="car4" class="com.spring5.createinstance.Car">
+        <constructor-arg name="id" value="1004"></constructor-arg>
+        <constructor-arg name="name" value="美国宝马"></constructor-arg>
+    </bean>
+
+
+
+<!--级联赋值方式二：
+
+-->
+<bean id="man3" class="com.spring5.createinstance.Man">
+    <property name="car" ref="car5"></property>
+
+<!--  Spring 通过调用setName方法给car属性进行重新赋值  -->
+    <property name="car.name" value="宝马"></property>
+</bean>
+    <bean id="car5" class="com.spring5.createinstance.Car">
+        <constructor-arg name="id" value="1005"></constructor-arg>
+        <constructor-arg name="name" value="杜卡迪"></constructor-arg>
+    </bean>
+
+
+</beans>

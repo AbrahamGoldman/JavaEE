@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace: 写接口全类名，相当于告诉mybatis这个配置文件是实现了哪个接口-->
+<mapper namespace="ssm.mybatis.dao.PersonDao">
+    <!--select 标签定义一个查询操作-->
+    <!--id：方法名,相当于方法的实现
+  resultMap="person" 指定使用哪个结果映射
+  #{id}是一个占位符，指的是方法形参名，就是我们传入的形参    -->
+    <select id="getPerson" resultMap="person3">
+ SELECT * FROM `t_person`  p  INNER JOIN `t_dog`  d  ON p.`id`= d.`fk`  WHERE  id  =1
+  </select>
+
+    <select id="SimpleGetPerson" resultMap="person3">
+ SELECT * FROM `t_person`   WHERE  id  =1
+  </select>
+<!--
+id	name	did 	dogid	dogname
+1	黄大仙	1	      1	   小黄
+-->
+<!--    ====================================================
+自定义属性赋值，数据库 一对一
+-->
+    <resultMap id="person" type="ssm.mybatis.bean.Person">
+        <id property="pid" column="id"/>
+        <result property="pname" column="name"/>
+        <result property="dog.id" column="dogid"/>
+        <result property="dog.name" column="dogname"/>
+    </resultMap>
+
+    <resultMap id="person1" type="ssm.mybatis.bean.Person">
+        <id property="pid" column="id"/>
+        <result property="pname" column="name"/>
+        <association property="dog" resultMap="dogg" ></association>
+    </resultMap>
+
+    <resultMap id="dogg" type="ssm.mybatis.bean.Dog">
+        <result property="id" column="dogid"/>
+        <result property="name" column="dogname"/>
+    </resultMap>
+
+    <resultMap id="person2" type="ssm.mybatis.bean.Person">
+        <id property="pid" column="id"/>
+        <result property="pname" column="name"/>
+        <association property="dog" javaType="ssm.mybatis.bean.Dog" >
+            <id property="id" column="dogid"/>
+            <result property="name" column="dogname"/>
+        </association>
+    </resultMap>
+<!--==================================================================
+给集合属性赋值  数据库一对多
+-->
+<resultMap id="person3" type="ssm.mybatis.bean.Person">
+    <id property="pid" column="id"/>
+    <result property="pname" column="name"/>
+    <collection property="dogs" ofType="ssm.mybatis.bean.Dog">
+        <id property="id" column="dogid"/>
+        <result property="name" column="dogname"/>
+    </collection>
+</resultMap>
+
+<!--    =============================================================
+分步查询
+-->
+
+</mapper>

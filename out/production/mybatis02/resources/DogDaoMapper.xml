@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace: 写接口全类名，相当于告诉mybatis这个配置文件是实现了哪个接口-->
+<mapper namespace="ssm.mybatis.dao.DogDao">
+    <!--由于我们JavaBean的属性名和数据库的字段完全不一致，所以需要指定map来告诉mybatis这种对应关系
+  resultMap :我们下面指定了map集，需要在这里引入，直接写入下面map的id属性值即可
+  #{id}是一个占位符，指的是方法形参名，就是我们传入的形参    -->
+    <select id="getIt" resultMap="littleDog">
+    SELECT * FROM `t_dog` WHERE `dogid` = #{id}
+  </select>
+
+    <select id="SimpleGetDog" resultMap="simple">
+    SELECT * FROM `t_dog` WHERE `dogid` = #{id}
+  </select>
+<!--id是JavaBean的别名
+type：JavaBean的全类名
+-->
+    <resultMap id="littleDog" type="ssm.mybatis.bean.Dog">
+<!--  property:属性名   column：字段名     -->
+        <id property="id" column="dogid"/>
+        <result property="name" column="dogname"/>
+    </resultMap>
+<!--==========================================================================
+分步查询
+-->
+    <resultMap id="simple" type="ssm.mybatis.bean.Dog">
+        <id property="id" column="dogid"/>
+        <result property="name" column="dogname"/>
+        <association property="person"
+                     select="ssm.mybatis.dao.PersonDao.SimpleGetPerson"
+        column="fk"></association>
+    </resultMap>
+
+</mapper>

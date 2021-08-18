@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 当前src下的文件-->
+<!-- 这个是没有配置属性的-->
+    <bean id="haha" class="com.spring5.createinstance.Person"></bean>
+
+
+<!-- 这个是配置了属性的，这里传入的值是调用的set方法-->
+    <bean id="tree1" class="com.spring5.createinstance.Tree">
+        <property name="age" value="20"></property>
+        <property name="name" value="常青树"></property>
+    </bean>
+
+<!-- 下面演示的是Spring创建对象，通过构造器传入参数-->
+    <bean name="car" class="com.spring5.createinstance.Car">
+<!-- 构造器参数赋值，可以用name::value 也可以用index::value 如果用index 就是从0开始计算-->
+        <constructor-arg name="id" value="1001"></constructor-arg>
+        <constructor-arg index="1" value="上汽大众"></constructor-arg>
+    </bean>
+
+<!-- 下面是演示P名称空间注入-->
+    <bean id="tree2" class="com.spring5.createinstance.Tree" p:age="100" p:name="柳树">
+    </bean>
+
+<!--下面是演示给属性注入 "" 和null值 以及特殊字符 &lt: < &gt: >-->
+    <bean id="tree3" class="com.spring5.createinstance.Tree">
+        <property name="age" value="30"></property>
+<!--        <property name="name" value=""></property>-->
+<!--        <property name="name"><null/></property>-->
+        <property name="name">
+            <value>
+                <![CDATA[<<Hello>>]]>
+            </value>
+        </property>
+    </bean>
+
+
+</beans>

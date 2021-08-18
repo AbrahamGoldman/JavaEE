@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace: 写接口全类名，相当于告诉mybatis这个配置文件是实现了哪个接口-->
+<mapper namespace="com.ssm.mapper.TeacherMapper">
+
+    <select id="getTeacherById" resultMap="map01" >
+    select * from t_teacher where id = #{id}
+  </select>
+
+<!--这个查询用来测试分页-->
+    <select id="getTeacherList" resultMap="map01" >
+    select * from t_teacher
+  </select>
+
+
+
+    <resultMap id="map01" type="com.ssm.bean.Teacher">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="adress"/>
+        <result property="birth" column="birth_date"/>
+        <result property="course" column="class_name"/>
+    </resultMap>
+
+</mapper>

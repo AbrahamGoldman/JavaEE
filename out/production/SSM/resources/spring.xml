@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+">
+<!--扫描器，除了springmvc的以外，其他的都扫-->
+    <context:component-scan base-package="com.ssm">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+<!--引入外部文件-->
+<context:property-placeholder location="classpath:druid.properties"/>
+    <bean id="druidDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl" value="${druid_url}"></property>
+        <property name="user" value="${druid_username}"></property>
+        <property name="password" value="${druid_password}"></property>
+        <property name="driverClass" value="${druid_driverClassName}"></property>
+    </bean>
+<!--现在有了mybatis就不用JDBCtemplate-->
+<!--接下来就是mybatis整合spring-->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+<!--指定全局配置文件的位置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--指定mapper的位置，指定数据源-->
+        <property name="dataSource" ref="druidDataSource"/>
+<!--下面这个一定要配-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+<!--將接口的实现加入IOC容器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ssm.mapper"></property>
+    </bean>
+
+
+<!--创建事务管理器-->
+    <bean id="tm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="druidDataSource"/>
+    </bean>
+
+<!--配置通知-->
+    <tx:advice transaction-manager="tm" id="interceptor">
+        <!--指定在什么方法上添加事务，以及设定事务的参数-->
+        <tx:attributes>
+            <tx:method name="*" isolation="REPEATABLE_READ" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+<!--设置切面和切入点-->
+    <aop:config>
+        <aop:pointcut id="pc" expression="execution(* com.ssm.service.TeacherService.*(..))"/>
+        <aop:advisor advice-ref="interceptor" pointcut-ref="pc"/>
+    </aop:config>
+
+</beans>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--测试bean的作用域-->
+    <bean id="phone" class="com.spring5.scope.Phone" p:name="苹果x" p:price="5999.00" scope="prototype">
+</bean>
+
+<!--测试bean的生命周期-->
+<bean id="tvwuwu" class="com.spring5.beanlife.TV" init-method="initialization" destroy-method="destroy">
+<!--<property name="price" value="699"></property>-->
+    <constructor-arg index="0" value="999"></constructor-arg>
+</bean>
+
+<!--后置处理器会对所有通过当前xml文件加载的bean对象执行后置处理器的操作，就是在初始化之前和之后-->
+    <bean id="myPostProcess" class="com.spring5.beanlife.MyPostProcess" ></bean>
+
+
+<!--这里用来写自动装配
+自动装配有两种：
+一种是根据名字：根据名字的话，需要外部bean的id的值和当前bean的属性名称相同，如果不相同就找不到
+一种是根据类型：不能有多个外部bean，因为它是根据类型匹配，如果有多个外部bean，它就不知道是哪个
+-->
+<bean id="employee" class="com.spring5.autowire.Employee" autowire="byType"></bean>
+    <bean id="dep" class="com.spring5.autowire.Department" p:name="技术部"></bean>
+
+</beans>

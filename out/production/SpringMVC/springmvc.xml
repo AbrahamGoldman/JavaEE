@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+<!--引入context名称空间，开启组件扫描-->
+    <context:component-scan base-package="com.springmvc"></context:component-scan>
+
+<!--配置一个视图解析器，能够帮我们自动拼串-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<!--为了解决我们写这玩意儿的麻烦：return "/WEB-INF/pages/success.jsp";
+我们开始拼串：prefix： 前缀  suffix： 后缀
+-->
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+</beans>
